@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jahongir Komiljonov | CyberSec</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#0a0e0a;--bg2:#0d120d;--bg3:#111811;
+      --green:#00ff41;--green2:#00cc33;--green3:#004d14;
+      --green-dim:rgba(0,255,65,0.08);--green-glow:rgba(0,255,65,0.25);
+      --text:#c8ffd4;--muted:#4a7a52;
+      --border:rgba(0,255,65,0.15);--border2:rgba(0,255,65,0.3);
+      --mono:'Share Tech Mono',monospace;
+      --sans:'Rajdhani',sans-serif;
+      --title:'Orbitron',monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.7;}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9998;}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--green3);border-radius:2px;}
+    ::-webkit-scrollbar-thumb:hover{background:var(--green2);}
+
+    nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(10,14,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-family:var(--title);font-size:1rem;color:var(--green);text-decoration:none;letter-spacing:0.1em;display:flex;align-items:center;gap:0.5rem;}
+    .nav-logo-icon{width:28px;height:28px;border:1.5px solid var(--green);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--green);font-family:var(--mono);}
+    .nav-links{display:flex;gap:0.25rem;list-style:none;}
+    .nav-links a{font-family:var(--mono);font-size:0.72rem;color:var(--muted);text-decoration:none;padding:0.4rem 0.8rem;border:1px solid transparent;border-radius:2px;letter-spacing:0.08em;transition:all 0.2s;}
+    .nav-links a:hover{color:var(--green);border-color:var(--border2);background:var(--green-dim);}
+    .nav-status{display:flex;align-items:center;gap:0.4rem;font-family:var(--mono);font-size:0.68rem;color:var(--green);}
+    .nav-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+
+    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 2rem 4rem;position:relative;overflow:hidden;}
+    .hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,65,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,0.04) 1px,transparent 1px);background-size:40px 40px;}
+    .hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,65,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+    .hero-inner{position:relative;z-index:1;max-width:800px;width:100%;text-align:center;}
+    .hero-prefix{font-family:var(--mono);font-size:0.78rem;color:var(--green);letter-spacing:0.2em;margin-bottom:1rem;animation:fadeUp 0.8s ease both;}
+    .hero-prefix span{color:var(--muted);}
+    .hero-name{font-family:var(--title);font-size:clamp(2rem,6vw,4.5rem);font-weight:900;color:#fff;line-height:1.1;letter-spacing:0.05em;animation:fadeUp 0.8s 0.1s ease both;}
+    .hero-name .green{color:var(--green);}
+    .hero-role{font-family:var(--mono);font-size:clamp(0.85rem,2vw,1.1rem);color:var(--muted);margin-top:1rem;animation:fadeUp 0.8s 0.2s ease both;}
+    .hero-role .cursor{display:inline-block;width:10px;height:1.1em;background:var(--green);vertical-align:middle;margin-left:2px;animation:blink 1s infinite;}
+    .hero-terminal{margin:2rem auto 0;max-width:520px;background:rgba(0,0,0,0.6);border:1px solid var(--border2);border-radius:6px;overflow:hidden;animation:fadeUp 0.8s 0.3s ease both;text-align:left;}
+    .terminal-bar{background:var(--bg3);padding:0.5rem 1rem;display:flex;align-items:center;gap:0.4rem;border-bottom:1px solid var(--border);}
+    .t-dot{width:10px;height:10px;border-radius:50%;}
+    .t-red{background:#ff5f57;}.t-yellow{background:#febc2e;}.t-green-d{background:#28c840;}
+    .terminal-title{font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-left:auto;margin-right:auto;}
+    .terminal-body{padding:1.25rem 1.5rem;font-family:var(--mono);font-size:0.82rem;line-height:2;}
+    .t-line{display:flex;gap:0.5rem;}
+    .t-prompt{color:var(--green);}.t-cmd{color:#fff;}
+    .t-out{color:var(--muted);padding-left:1rem;}
+    .t-out .hl{color:var(--green);}
+    .hero-cta{margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.5s ease both;}
+    .btn-green{background:var(--green);color:var(--bg);padding:0.75rem 2rem;border:none;border-radius:3px;font-family:var(--mono);font-size:0.82rem;text-decoration:none;cursor:pointer;font-weight:700;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.5rem;}
+    .btn-green:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 0 20px var(--green-glow);}
+    .btn-ghost{background:transparent;color:var(--green);padding:0.75rem 2rem;border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:0.82rem;text-decoration:none;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.5rem;}
+    .btn-ghost:hover{background:var(--green-dim);transform:translateY(-2px);box-shadow:0 0 20px var(--green-glow);}
+
+    section{padding:5rem 2rem;}
+    .container{max-width:1000px;margin:0 auto;}
+    .sec-label{font-family:var(--mono);font-size:0.72rem;color:var(--green);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;}
+    .sec-label span{color:var(--muted);}
+    .sec-title{font-family:var(--title);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;color:#fff;margin-bottom:0.5rem;letter-spacing:0.05em;}
+    .sec-line{width:50px;height:2px;background:linear-gradient(90deg,var(--green),transparent);margin-bottom:3rem;}
+
+    #about{background:var(--bg2);}
+    .about-grid{display:grid;grid-template-columns:1fr 1.8fr;gap:3rem;align-items:start;}
+    .about-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+    .about-avatar{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#0d1a0d 0%,#1a2e1a 100%);display:flex;align-items:center;justify-content:center;font-family:var(--title);font-size:4rem;color:var(--green);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+    .about-avatar::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(0,255,65,0.03) 8px,rgba(0,255,65,0.03) 9px),repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(0,255,65,0.03) 8px,rgba(0,255,65,0.03) 9px);}
+    .about-info{padding:1.25rem;}
+    .about-info-row{display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.78rem;color:var(--text);}
+    .about-info-row:last-child{border-bottom:none;}
+    .about-info-row .key{color:var(--muted);min-width:70px;}
+    .about-info-row .val{color:var(--green);}
+    .about-text p{color:var(--muted);margin-bottom:1rem;font-size:1rem;}
+    .about-text p .hl{color:var(--text);}
+    .skills-grid{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem;}
+    .skill{font-family:var(--mono);font-size:0.72rem;color:var(--green);border:1px solid var(--border2);padding:0.3rem 0.75rem;border-radius:3px;background:var(--green-dim);letter-spacing:0.05em;transition:all 0.2s;}
+    .skill:hover{background:rgba(0,255,65,0.15);box-shadow:0 0 10px var(--green-glow);}
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;}
+    .stat-box{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1rem;text-align:center;}
+    .stat-num{font-family:var(--title);font-size:1.8rem;color:var(--green);font-weight:900;line-height:1;}
+    .stat-lbl{font-family:var(--mono);font-size:0.65rem;color:var(--muted);margin-top:0.3rem;letter-spacing:0.08em;}
+
+    #blog{background:var(--bg);}
+    .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+    .blog-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.75rem;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;}
+    .blog-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--green);transition:height 0.3s;}
+    .blog-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.4),0 0 20px var(--green-glow);}
+    .blog-card:hover::before{height:100%;}
+    .blog-tag{font-family:var(--mono);font-size:0.65rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;background:var(--green-dim);border:1px solid var(--border2);padding:0.2rem 0.6rem;border-radius:2px;display:inline-block;margin-bottom:1rem;}
+    .blog-card h3{font-family:var(--sans);font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:0.75rem;line-height:1.3;}
+    .blog-card p{font-size:0.88rem;color:var(--muted);line-height:1.6;}
+    .blog-meta{display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;font-family:var(--mono);font-size:0.68rem;color:var(--muted);}
+    .blog-read-btn{color:var(--green);text-decoration:none;display:flex;align-items:center;gap:0.3rem;font-family:var(--mono);font-size:0.72rem;transition:gap 0.2s;}
+    .blog-read-btn:hover{gap:0.6rem;}
+
+    #news{background:var(--bg2);}
+    .news-list{display:flex;flex-direction:column;gap:1rem;}
+    .news-item{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--green3);border-radius:4px;padding:1.25rem 1.5rem;display:flex;gap:1.5rem;align-items:flex-start;transition:all 0.2s;cursor:pointer;}
+    .news-item:hover{border-left-color:var(--green);background:var(--bg2);transform:translateX(4px);}
+    .news-date{font-family:var(--mono);font-size:0.68rem;color:var(--green);min-width:70px;text-align:center;background:var(--green-dim);border:1px solid var(--border2);padding:0.4rem 0.5rem;border-radius:3px;line-height:1.4;}
+    .news-content h4{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.4rem;}
+    .news-content p{font-size:0.85rem;color:var(--muted);}
+    .news-badge{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;padding:0.15rem 0.5rem;border-radius:2px;margin-left:0.5rem;vertical-align:middle;}
+    .badge-new{background:rgba(0,255,65,0.15);color:var(--green);border:1px solid var(--border2);}
+    .badge-warn{background:rgba(255,165,0,0.15);color:orange;border:1px solid rgba(255,165,0,0.3);}
+    .badge-crit{background:rgba(255,50,50,0.15);color:#ff6464;border:1px solid rgba(255,50,50,0.3);}
+
+    #resources{background:var(--bg);}
+    .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+    .res-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;text-decoration:none;transition:all 0.2s;display:block;}
+    .res-card:hover{border-color:var(--green);background:var(--bg3);box-shadow:0 0 20px var(--green-glow);transform:translateY(-3px);}
+    .res-icon{width:44px;height:44px;background:var(--green-dim);border:1px solid var(--border2);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.3rem;}
+    .res-card h4{color:#fff;font-weight:600;font-size:0.95rem;margin-bottom:0.4rem;}
+    .res-card p{color:var(--muted);font-size:0.8rem;}
+    .res-link{display:flex;align-items:center;gap:0.3rem;margin-top:1rem;font-family:var(--mono);font-size:0.68rem;color:var(--green);}
+
+    #social{background:var(--bg2);}
+    .social-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+    .social-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:1.75rem 1.5rem;text-align:center;text-decoration:none;transition:all 0.25s;display:block;}
+    .social-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+    .social-icon-wrap{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;}
+    .social-card h4{font-weight:700;font-size:0.95rem;margin-bottom:0.25rem;}
+    .social-card p{font-size:0.8rem;color:var(--muted);font-family:var(--mono);}
+    .s-tg .social-icon-wrap{background:rgba(0,136,204,0.15);border:1px solid rgba(0,136,204,0.3);}
+    .s-tg h4{color:#29b6f6;}.s-tg:hover{border-color:#29b6f6;box-shadow:0 10px 30px rgba(41,182,246,0.15);}
+    .s-ig .social-icon-wrap{background:rgba(225,48,108,0.15);border:1px solid rgba(225,48,108,0.3);}
+    .s-ig h4{color:#f06292;}.s-ig:hover{border-color:#f06292;box-shadow:0 10px 30px rgba(240,98,146,0.15);}
+    .s-gh .social-icon-wrap{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);}
+    .s-gh h4{color:#fff;}.s-gh:hover{border-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,0.08);}
+    .s-gm .social-icon-wrap{background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.3);}
+    .s-gm h4{color:#ef5350;}.s-gm:hover{border-color:#ef5350;box-shadow:0 10px 30px rgba(239,83,80,0.15);}
+
+    #contact{background:var(--bg);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+    .contact-items{display:flex;flex-direction:column;gap:0.75rem;}
+    .contact-item{display:flex;align-items:center;gap:1rem;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:1rem 1.25rem;text-decoration:none;transition:all 0.2s;}
+    .contact-item:hover{border-color:var(--green);background:var(--bg3);transform:translateX(4px);box-shadow:0 0 15px var(--green-glow);}
+    .c-icon{width:36px;height:36px;background:var(--green-dim);border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .contact-item .c-label{font-family:var(--mono);font-size:0.65rem;color:var(--muted);}
+    .contact-item .c-val{font-size:0.9rem;color:var(--text);font-weight:600;}
+    .contact-form{display:flex;flex-direction:column;gap:1rem;}
+    .form-title{font-family:var(--mono);font-size:0.72rem;color:var(--green);letter-spacing:0.1em;margin-bottom:0.5rem;}
+    .form-title span{color:var(--muted);}
+    .contact-form input,.contact-form textarea{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:0.85rem 1rem;font-family:var(--mono);font-size:0.82rem;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;resize:vertical;}
+    .contact-form input:focus,.contact-form textarea:focus{border-color:var(--green);box-shadow:0 0 10px var(--green-glow);}
+    .contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--muted);}
+    .contact-form textarea{min-height:120px;}
+
+    footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem;}
+    .footer-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+    .footer-logo{font-family:var(--title);font-size:0.9rem;color:var(--green);text-decoration:none;}
+    .footer-copy{font-family:var(--mono);font-size:0.72rem;color:var(--muted);}
+    .footer-copy span{color:var(--green);}
+    .footer-links{display:flex;gap:1.5rem;}
+    .footer-links a{font-family:var(--mono);font-size:0.68rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .footer-links a:hover{color:var(--green);}
+
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+    #matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.04;}
+
+    @media(max-width:700px){
+      .about-grid,.contact-grid{grid-template-columns:1fr;}
+      .nav-links{display:none;}
+      .nav-status{display:none;}
+      .stats-row{grid-template-columns:repeat(3,1fr);}
+    }
+  </style>
+</head>
+<body>
+<canvas id="matrix-canvas"></canvas>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-icon">&gt;_</div>JK.SEC
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">//haqimda</a></li>
+    <li><a href="#blog">//blog</a></li>
+    <li><a href="#news">//yangiliklar</a></li>
+    <li><a href="#resources">//resurslar</a></li>
+    <li><a href="#social">//tarmoqlar</a></li>
+    <li><a href="#contact">//aloqa</a></li>
+  </ul>
+  <div class="nav-status"><div class="nav-dot"></div>ONLINE</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-prefix"><span>// </span>kiberxavfsizlik muhandisi</div>
+    <h1 class="hero-name">JAHONGIR<br><span class="green">KOMILJONOV</span></h1>
+    <p class="hero-role">&gt; Kiberxavfsizlik · CTF · Penetration Testing<span class="cursor"></span></p>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green-d"></div>
+        <span class="terminal-title">jahongir@cybersec:~</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> whoami</span></div>
+        <div class="t-out"><span class="hl">Jahongir Komiljonov</span> — Cybersecurity Engineer</div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"> cat info.txt</span></div>
+        <div class="t-out">Universitet: <span class="hl">Kokand University</span></div>
+        <div class="t-out">Yo'nalish: <span class="hl">Kiberxavfsizlik Muhandisligi</span></div>
+        <div class="t-out">Kurs: <span class="hl">2-kurs</span> | Joylashuv: <span class="hl">Farg'ona, O'zbekiston</span></div>
+        <div class="t-line" style="margin-top:0.5rem"><span class="t-prompt">$</span><span class="t-cmd"> ./status.sh</span></div>
+        <div class="t-out"><span class="hl" style="color:#00ff41">[ OK ]</span> O'rganish rejimi: <span class="hl">FAOL</span></div>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-green">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.17 6.81 19.79 19.79 0 01.12 2.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Bog'lanish
+      </a>
+      <a href="#blog" class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Blogimni o'qi
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>01. men_haqimda</p>
+      <h2 class="sec-title">KIM MEN?</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-card">
+          <div class="about-avatar">JK</div>
+          <div class="about-info">
+            <div class="about-info-row"><span class="key">ism:</span><span class="val">Jahongir Komiljonov</span></div>
+            <div class="about-info-row"><span class="key">status:</span><span class="val" style="color:#00ff41">● talaba</span></div>
+            <div class="about-info-row"><span class="key">kurs:</span><span class="val">2-kurs</span></div>
+            <div class="about-info-row"><span class="key">univ:</span><span class="val">Kokand University</span></div>
+            <div class="about-info-row"><span class="key">joy:</span><span class="val">Oltiariq, Farg'ona</span></div>
+            <div class="about-info-row"><span class="key">tel:</span><span class="val">+998 91 112 20 03</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <p>Salom! Men <span class="hl">Jahongir Komiljonov</span> — Kokand Universitetining Kiberxavfsizlik Muhandisligi yo'nalishi <span class="hl">2-kurs</span> talabasisman.</p>
+        <p>Raqamli dunyo xavfsizligi mening asosiy qiziqishim. <span class="hl">Tarmoq xavfsizligi</span>, <span class="hl">kriptografiya</span>, <span class="hl">penetration testing</span> va <span class="hl">CTF musobaqalari</span> bilan faol shug'ullanaman.</p>
+        <p>Ushbu blog orqali o'z bilimlarimni va kiberxavfsizlik sohasidagi yangiliklar bilan <span class="hl">O'zbekiston</span> talabalarini xabardor qilishni maqsad qilganman.</p>
+        <div class="skills-grid">
+          <span class="skill">Network Security</span><span class="skill">Linux</span><span class="skill">Python</span>
+          <span class="skill">Wireshark</span><span class="skill">Kali Linux</span><span class="skill">CTF</span>
+          <span class="skill">Cryptography</span><span class="skill">Nmap</span><span class="skill">Metasploit</span><span class="skill">Web Security</span>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-num">2+</div><div class="stat-lbl">YIL TAJRIBA</div></div>
+          <div class="stat-box"><div class="stat-num">10+</div><div class="stat-lbl">CTF YECHILDI</div></div>
+          <div class="stat-box"><div class="stat-num">15+</div><div class="stat-lbl">BLOG MAQOLA</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>02. blog_maqolalar</p>
+      <h2 class="sec-title">BLOG</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal"><span class="blog-tag">Parol Xavfsizligi</span><h3>Kuchli parol yaratish: 2025 qoidalari</h3><p>Ko'pchilik zaif parollar ishlatadi. Bu maqolada kuchli va xavfsiz parol yaratish usullari haqida batafsil.</p><div class="blog-meta"><span>Mar 2025</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+      <div class="blog-card reveal"><span class="blog-tag">Tarmoq Xavfsizligi</span><h3>VPN texnologiyasi qanday ishlaydi?</h3><p>VPN nima, qanday ishlaydi, qaysi VPN protokollari xavfsizroq ekanligi haqida to'liq qo'llanma.</p><div class="blog-meta"><span>Feb 2025</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+      <div class="blog-card reveal"><span class="blog-tag">CTF</span><h3>CTF boshlash: Yangi boshlovchilar uchun yo'l xaritasi</h3><p>Capture The Flag musobaqalariga qanday tayyorlanish kerak va qayerdan boshlash haqida qo'llanma.</p><div class="blog-meta"><span>Jan 2025</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+      <div class="blog-card reveal"><span class="blog-tag">Linux</span><h3>Kali Linux asoslari: Pentester uchun muhim buyruqlar</h3><p>Kali Linux tizimida eng ko'p ishlatiladigan buyruqlar va ularning penetration testing da qo'llanilishi.</p><div class="blog-meta"><span>Dec 2024</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+      <div class="blog-card reveal"><span class="blog-tag">Kriptografiya</span><h3>Kriptografiya asoslari: Shifrlash algoritmlari</h3><p>AES, RSA, SHA kabi shifrlash algoritmlari qanday ishlaydi va ularni qachon ishlatish kerak.</p><div class="blog-meta"><span>Nov 2024</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+      <div class="blog-card reveal"><span class="blog-tag">Web Xavfsizlik</span><h3>SQL Injection hujumlari va ulardan himoya</h3><p>SQL Injection nima ekanligi, qanday amalga oshirilishi va web ilovalarda bundan qanday himoyalanish haqida.</p><div class="blog-meta"><span>Oct 2024</span><a href="#" class="blog-read-btn">O'qish →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>03. yangiliklar</p>
+      <h2 class="sec-title">KIBERXAVFSIZLIK YANGILIKLARI</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="news-list">
+      <div class="news-item reveal"><div class="news-date">MAR<br>2025</div><div class="news-content"><h4>Microsoft Windows'da kritik zaiflik topildi <span class="news-badge badge-crit">KRITIK</span></h4><p>Windows 11 tizimida masofaviy kod bajarilishiga olib keladigan zaiflik aniqlandi. Tezda yangilash tavsiya etiladi.</p></div></div>
+      <div class="news-item reveal"><div class="news-date">MAR<br>2025</div><div class="news-content"><h4>Google Chrome'da 0-day zaiflik <span class="news-badge badge-warn">MUHIM</span></h4><p>Chrome brauzerida faol ekspluatatsiya qilinayotgan zaiflik haqida xabar berildi. 123.x versiyasiga o'tish zarur.</p></div></div>
+      <div class="news-item reveal"><div class="news-date">FEB<br>2025</div><div class="news-content"><h4>O'zbekistonda kiberxavfsizlik mutaxassislariga talab oshdi <span class="news-badge badge-new">YANGI</span></h4><p>2025-yilda O'zbekiston IT bozorida kiberxavfsizlik bo'yicha mutaxassislarga ehtiyoj 40% ga oshdi.</p></div></div>
+      <div class="news-item reveal"><div class="news-date">FEB<br>2025</div><div class="news-content"><h4>Yangi ransomware to'lqini Osiyo mamlakatlarini nishonga oldi <span class="news-badge badge-crit">XAVFLI</span></h4><p>LockBit 4.0 varianti Osiyo mintaqasidagi davlat va moliya tashkilotlariga hujumlarni kuchaytirdi.</p></div></div>
+      <div class="news-item reveal"><div class="news-date">JAN<br>2025</div><div class="news-content"><h4>OWASP Top 10 2025 yangilandi <span class="news-badge badge-new">YANGI</span></h4><p>Web ilova xavfsizligining eng muhim 10 ta zaiflik ro'yxati yangilandi. Injeksiya hujumlari birinchi o'rinda qolmoqda.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>04. foydali_resurslar</p>
+      <h2 class="sec-title">O'RGANISH RESURSLARI</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="res-grid">
+      <a href="https://tryhackme.com" target="_blank" class="res-card reveal"><div class="res-icon">🎯</div><h4>TryHackMe</h4><p>Boshlang'ich va o'rta daraja uchun interaktiv kiberxavfsizlik platformasi.</p><div class="res-link">tryhackme.com →</div></a>
+      <a href="https://hackthebox.com" target="_blank" class="res-card reveal"><div class="res-icon">📦</div><h4>HackTheBox</h4><p>Real dunyo stsenariylarida penetration testing ko'nikmalarini mashq qilish.</p><div class="res-link">hackthebox.com →</div></a>
+      <a href="https://overthewire.org" target="_blank" class="res-card reveal"><div class="res-icon">🔐</div><h4>OverTheWire</h4><p>Linux va tarmoq xavfsizligi bo'yicha bosqichma-bosqich o'yinlar.</p><div class="res-link">overthewire.org →</div></a>
+      <a href="https://cybrary.it" target="_blank" class="res-card reveal"><div class="res-icon">📚</div><h4>Cybrary</h4><p>Kiberxavfsizlik bo'yicha bepul va pullik online kurslar platformasi.</p><div class="res-link">cybrary.it →</div></a>
+      <a href="https://portswigger.net/web-security" target="_blank" class="res-card reveal"><div class="res-icon">🕷️</div><h4>PortSwigger Labs</h4><p>Web xavfsizlik zaifliklarini o'rganish uchun bepul laboratoriyalar.</p><div class="res-link">portswigger.net →</div></a>
+      <a href="https://picoctf.org" target="_blank" class="res-card reveal"><div class="res-icon">🏁</div><h4>picoCTF</h4><p>Talabalar uchun mo'ljallangan CTF musobaqalari va mashqlar platformasi.</p><div class="res-link">picoctf.org →</div></a>
+      <a href="https://exploit-db.com" target="_blank" class="res-card reveal"><div class="res-icon">💣</div><h4>Exploit-DB</h4><p>Zaifliklar va exploit kodlarining ommaviy ma'lumotlar bazasi.</p><div class="res-link">exploit-db.com →</div></a>
+      <a href="https://cve.mitre.org" target="_blank" class="res-card reveal"><div class="res-icon">🛡️</div><h4>CVE Database</h4><p>Dunyo bo'yicha aniqlangan zaifliklarning rasmiy katalogi.</p><div class="res-link">cve.mitre.org →</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>05. ijtimoiy_tarmoqlar</p>
+      <h2 class="sec-title">MENI KUZATING</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="social-grid">
+      <a href="https://t.me/komiljonov_cs" target="_blank" class="social-card s-tg reveal">
+        <div class="social-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.68 7.93c-.12.57-.46.71-.93.44l-2.56-1.89-1.23 1.19c-.14.14-.25.25-.51.25l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.54 14.96l-2.51-.79c-.55-.17-.56-.55.11-.81l9.82-3.79c.46-.17.86.11.68.63z"/></svg></div>
+        <h4>Telegram</h4><p>@komiljonov_cs</p>
+      </a>
+      <a href="https://instagram.com/jahongir_komiljonovv" target="_blank" class="social-card s-ig reveal">
+        <div class="social-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f06292" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="#f06292" stroke="none"/></svg></div>
+        <h4>Instagram</h4><p>@jahongir_komiljonovv</p>
+      </a>
+      <a href="https://github.com" target="_blank" class="social-card s-gh reveal">
+        <div class="social-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></div>
+        <h4>GitHub</h4><p>@jahongir-dev</p>
+      </a>
+      <a href="mailto:jahongirkomiljonov222@gmail.com" class="social-card s-gm reveal">
+        <div class="social-icon-wrap"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ef5350" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+        <h4>Gmail</h4><p>jahongirkomiljonov222</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="sec-label"><span>// </span>06. bog'lanish</p>
+      <h2 class="sec-title">BOG'LANISH</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <p style="color:var(--muted);margin-bottom:1.5rem;font-size:0.95rem;">Savol, hamkorlik yoki shunchaki salom uchun menga yozing!</p>
+        <div class="contact-items">
+          <a href="tel:+998911122003" class="contact-item">
+            <div class="c-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.17 6.81 19.79 19.79 0 01.12 2.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+            <div><div class="c-label">TELEFON</div><div class="c-val">+998 91 112 20 03</div></div>
+          </a>
+          <a href="mailto:jahongirkomiljonov222@gmail.com" class="contact-item">
+            <div class="c-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+            <div><div class="c-label">EMAIL</div><div class="c-val">jahongirkomiljonov222@gmail.com</div></div>
+          </a>
+          <a href="https://t.me/komiljonov_cs" target="_blank" class="contact-item">
+            <div class="c-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--green)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.68 7.93c-.12.57-.46.71-.93.44l-2.56-1.89-1.23 1.19c-.14.14-.25.25-.51.25l.18-2.6 4.74-4.28c.21-.18-.04-.28-.32-.1L7.54 14.96l-2.51-.79c-.55-.17-.56-.55.11-.81l9.82-3.79c.46-.17.86.11.68.63z"/></svg></div>
+            <div><div class="c-label">TELEGRAM</div><div class="c-val">@komiljonov_cs</div></div>
+          </a>
+          <a href="https://instagram.com/jahongir_komiljonovv" target="_blank" class="contact-item">
+            <div class="c-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="var(--green)" stroke="none"/></svg></div>
+            <div><div class="c-label">INSTAGRAM</div><div class="c-val">@jahongir_komiljonovv</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="form-title"><span>// </span>xabar_yuborish.exe</p>
+        <form class="contact-form" onsubmit="handleForm(event)">
+          <input type="text" placeholder="// ismingiz" required/>
+          <input type="email" placeholder="// email manzilingiz" required/>
+          <input type="text" placeholder="// mavzu"/>
+          <textarea placeholder="// xabaringiz..."></textarea>
+          <button type="submit" class="btn-green" style="width:100%;justify-content:center;padding:0.9rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            YUBORISH
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <a href="#hero" class="footer-logo">JK.SEC</a>
+    <p class="footer-copy">© 2025 <span>Jahongir Komiljonov</span> — Barcha huquqlar himoyalangan</p>
+    <div class="footer-links">
+      <a href="#about">Haqimda</a><a href="#blog">Blog</a><a href="#contact">Aloqa</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// MATRIX RAIN
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+const chars = '01アイウエオABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+const fontSize = 13;
+let cols, drops;
+function init() { cols = Math.floor(canvas.width / fontSize); drops = Array(cols).fill(1); }
+init();
+function draw() {
+  ctx.fillStyle = 'rgba(10,14,10,0.05)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ff41';
+  ctx.font = fontSize + 'px monospace';
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(draw, 45);
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// TYPEWRITER
+const roles = ['Kiberxavfsizlik Muhandisi','Kokand University Talabasi','CTF Ishqibozi','Penetration Tester'];
+let ri = 0, ci = 0, deleting = false;
+const roleEl = document.querySelector('.hero-role');
+function typeWriter() {
+  const current = roles[ri];
+  if (!deleting) {
+    roleEl.innerHTML = '&gt; ' + current.slice(0, ci + 1) + '<span class="cursor"></span>';
+    ci++;
+    if (ci === current.length) { deleting = true; setTimeout(typeWriter, 2000); return; }
+  } else {
+    roleEl.innerHTML = '&gt; ' + current.slice(0, ci - 1) + '<span class="cursor"></span>';
+    ci--;
+    if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; }
+  }
+  setTimeout(typeWriter, deleting ? 50 : 80);
+}
+typeWriter();
+
+// FORM
+function handleForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.innerHTML = '&#10003; MUVAFFAQIYATLI YUBORILDI';
+  btn.style.background = '#00cc33';
+  setTimeout(() => { btn.innerHTML = 'YUBORISH'; btn.style.background = ''; e.target.reset(); }, 3000);
+}
+
+// ACTIVE NAV
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 80;
+  sections.forEach(s => {
+    const link = document.querySelector('.nav-links a[href="#' + s.id + '"]');
+    if (!link) return;
+    if (y >= s.offsetTop && y < s.offsetTop + s.offsetHeight) {
+      link.style.color = 'var(--green)'; link.style.borderColor = 'var(--border2)'; link.style.background = 'var(--green-dim)';
+    } else { link.style.color = ''; link.style.borderColor = ''; link.style.background = ''; }
+  });
+});
+</script>
+</body>
+</html>
